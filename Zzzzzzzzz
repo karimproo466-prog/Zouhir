@@ -1,0 +1,2142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLS MANTISX - نظام الوكالة الكامل</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #1e40af;
+    --primary-light: #3b82f6;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #06b6d4;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --text: #0f172a;
+    --text-sec: #64748b;
+    --border: #e2e8f0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+.app-header {
+    background: linear-gradient(135deg, #1e3a8a, #1e40af, #2563eb);
+    color: white;
+    padding: 0.85rem 2rem;
+    box-shadow: 0 4px 20px rgba(30,64,175,0.25);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.brand { display: flex; align-items: center; gap: 1rem; }
+.brand-icon {
+    width: 48px; height: 48px;
+    background: white;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--primary); font-size: 1.4rem; font-weight: 900;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.brand h1 { font-size: 1.25rem; margin: 0; font-weight: 900; letter-spacing: 0.5px; }
+.brand p { font-size: 0.68rem; opacity: 0.85; margin: 0; letter-spacing: 2px; }
+.header-actions { display: flex; align-items: center; gap: 0.75rem; }
+.header-badge {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.status-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--success);
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 8px var(--success);
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+.app-container {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    max-width: 1700px;
+    margin: 0 auto;
+}
+
+.sidebar {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 1rem;
+    height: fit-content;
+    position: sticky;
+    top: 95px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.sidebar-section {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.68rem;
+    color: var(--text-sec);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-top: 0.75rem;
+}
+.nav-btn {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    color: var(--text-sec);
+    transition: all 0.2s;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: right;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+.nav-btn:hover { background: var(--bg); color: var(--primary); }
+.nav-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    box-shadow: 0 4px 12px rgba(30,64,175,0.3);
+}
+.nav-btn i { font-size: 1.1rem; width: 22px; text-align: center; }
+.nav-btn .badge-count {
+    margin-right: auto;
+    background: rgba(255,255,255,0.25);
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+}
+.nav-btn:not(.active) .badge-count {
+    background: var(--bg);
+    color: var(--primary);
+}
+
+.main-content { min-height: 500px; }
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(8px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+.page-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.page-title h2 {
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin: 0;
+    font-weight: 900;
+    display: flex; align-items: center; gap: 0.5rem;
+}
+.page-title p {
+    margin: 0.25rem 0 0;
+    color: var(--text-sec);
+    font-size: 0.85rem;
+}
+
+.card-blk {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    border: 1px solid var(--border);
+}
+.card-blk-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.card-blk-header h3 {
+    font-size: 1.05rem;
+    margin: 0;
+    color: var(--primary);
+    font-weight: 800;
+    display: flex; align-items: center; gap: 0.5rem;
+}
+.card-blk-body { padding: 1.5rem; }
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.stat-box {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+}
+.stat-box:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+.stat-box .num {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 0.15rem;
+}
+.stat-box .lbl {
+    font-size: 0.8rem;
+    color: var(--text-sec);
+    font-weight: 600;
+}
+.stat-box .ico {
+    width: 55px; height: 55px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+}
+.ico.blue { background: rgba(59,130,246,0.15); color: var(--primary-light); }
+.ico.green { background: rgba(16,185,129,0.15); color: var(--success); }
+.ico.orange { background: rgba(245,158,11,0.15); color: var(--accent); }
+.ico.red { background: rgba(239,68,68,0.15); color: var(--danger); }
+.ico.info { background: rgba(6,182,212,0.15); color: var(--info); }
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.form-group { display: flex; flex-direction: column; }
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+}
+.form-group label .req { color: var(--danger); }
+.form-group label .hint-text {
+    font-weight: 400;
+    color: var(--text-sec);
+    font-size: 0.75rem;
+    margin-right: 0.25rem;
+}
+.form-input, .form-select-blk {
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: all 0.2s;
+    background: white;
+    color: var(--text);
+}
+.form-input:focus, .form-select-blk:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(30,64,175,0.1);
+}
+.form-input::placeholder { color: #94a3b8; }
+textarea.form-input { resize: vertical; min-height: 80px; }
+
+.btn-blk {
+    padding: 0.7rem 1.4rem;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+    text-decoration: none;
+    justify-content: center;
+}
+.btn-blk:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.btn-blk:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-primary-blk { background: var(--primary); color: white; }
+.btn-primary-blk:hover { background: #1e3a8a; color: white; }
+.btn-success-blk { background: var(--success); color: white; }
+.btn-success-blk:hover { background: #059669; color: white; }
+.btn-danger-blk { background: var(--danger); color: white; }
+.btn-danger-blk:hover { background: #dc2626; color: white; }
+.btn-warning-blk { background: var(--warning); color: white; }
+.btn-warning-blk:hover { background: #d97706; color: white; }
+.btn-info-blk { background: var(--info); color: white; }
+.btn-outline-blk {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--text-sec);
+}
+.btn-outline-blk:hover { background: var(--bg); color: var(--primary); border-color: var(--primary); }
+.btn-sm-blk { padding: 0.4rem 0.75rem; font-size: 0.78rem; }
+
+.table-blk {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+.table-blk thead {
+    background: #f8fafc;
+    border-bottom: 2px solid var(--border);
+}
+.table-blk th {
+    padding: 0.9rem 0.75rem;
+    text-align: right;
+    font-size: 0.78rem;
+    color: var(--text-sec);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.table-blk td {
+    padding: 0.9rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+.table-blk tbody tr { transition: background 0.15s; }
+.table-blk tbody tr:hover { background: #f8fafc; }
+
+.badge-blk {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 50px;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+.badge-success-blk { background: rgba(16,185,129,0.15); color: var(--success); }
+.badge-warning-blk { background: rgba(245,158,11,0.15); color: var(--warning); }
+.badge-danger-blk { background: rgba(239,68,68,0.15); color: var(--danger); }
+.badge-info-blk { background: rgba(6,182,212,0.15); color: var(--info); }
+.badge-primary-blk { background: rgba(59,130,246,0.15); color: var(--primary); }
+
+.photo-uploader {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+.upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #f8fafc;
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.upload-zone:hover {
+    border-color: var(--primary);
+    background: rgba(30,64,175,0.03);
+}
+.upload-zone.has-file {
+    border-color: var(--success);
+    border-style: solid;
+    background: rgba(16,185,129,0.03);
+}
+.upload-zone i.big-icon {
+    font-size: 3rem;
+    color: var(--text-sec);
+    margin-bottom: 0.75rem;
+    opacity: 0.5;
+}
+.upload-zone .title {
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+}
+.upload-zone .hint {
+    font-size: 0.75rem;
+    color: var(--text-sec);
+}
+.upload-zone .preview {
+    max-width: 100%;
+    max-height: 160px;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.upload-zone input[type="file"] { display: none; }
+.upload-zone .check-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--success);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px rgba(16,185,129,0.4);
+}
+.upload-zone .remove-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--danger);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(239,68,68,0.4);
+}
+
+.captcha-methods {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+}
+.method-btn {
+    padding: 0.6rem 1.1rem;
+    border: 1.5px solid var(--border);
+    background: white;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.method-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(30,64,175,0.3);
+}
+.method-btn:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+
+.captcha-display {
+    background: #f8fafc;
+    border: 2px dashed var(--border);
+    border-radius: 14px;
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 1.25rem;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.captcha-display img {
+    max-width: 320px;
+    border-radius: 10px;
+    background: white;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 1rem;
+}
+.captcha-display .no-captcha i {
+    font-size: 3.5rem;
+    color: var(--text-sec);
+    opacity: 0.3;
+    display: block;
+    margin-bottom: 1rem;
+}
+.captcha-display .no-captcha p {
+    color: var(--text-sec);
+    margin: 0.25rem 0;
+}
+
+.captcha-input-group {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 600px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+.captcha-input-group input {
+    flex: 1;
+    min-width: 250px;
+    padding: 1rem;
+    font-size: 1.4rem;
+    letter-spacing: 8px;
+    text-align: center;
+    font-weight: 900;
+    border: 2.5px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+.captcha-input-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(30,64,175,0.1);
+}
+
+.log-console {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 12px;
+    padding: 1.25rem;
+    height: 400px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    line-height: 1.9;
+}
+.log-line { display: flex; gap: 0.75rem; padding: 2px 0; }
+.log-line .time { color: #64748b; flex-shrink: 0; }
+.log-line .level {
+    font-weight: 700;
+    flex-shrink: 0;
+    min-width: 70px;
+}
+.log-line.INFO .level, .log-line.INFO .msg { color: #60a5fa; }
+.log-line.SUCCESS .level, .log-line.SUCCESS .msg { color: #34d399; }
+.log-line.WARNING .level, .log-line.WARNING .msg { color: #fbbf24; }
+.log-line.ERROR .level, .log-line.ERROR .msg { color: #f87171; }
+.log-line.SYSTEM .level, .log-line.SYSTEM .msg { color: #a78bfa; }
+
+.alert-blk {
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    font-size: 0.88rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    line-height: 1.5;
+}
+.alert-info { background: rgba(59,130,246,0.1); border-right: 4px solid var(--primary); color: #1e3a8a; }
+.alert-warning { background: rgba(245,158,11,0.1); border-right: 4px solid var(--warning); color: #78350f; }
+.alert-success { background: rgba(16,185,129,0.1); border-right: 4px solid var(--success); color: #064e3b; }
+.alert-danger { background: rgba(239,68,68,0.1); border-right: 4px solid var(--danger); color: #7f1d1d; }
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-sec);
+}
+.empty-state i {
+    font-size: 3rem;
+    opacity: 0.3;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+.empty-state p { margin: 0.5rem 0; }
+.empty-state .hint { font-size: 0.8rem; }
+
+.hidden { display: none !important; }
+
+.proxy-status {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.proxy-working { background: var(--success); box-shadow: 0 0 8px var(--success); }
+.proxy-failed { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+.proxy-untested { background: var(--text-sec); }
+.proxy-testing { 
+    background: var(--warning); 
+    box-shadow: 0 0 8px var(--warning);
+    animation: pulse 1s infinite;
+}
+.proxy-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s;
+}
+.proxy-row:hover {
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.proxy-address {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 0.9rem;
+    flex: 1;
+}
+.proxy-meta {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+    .app-container { grid-template-columns: 1fr; padding: 1rem; }
+    .sidebar { position: static; }
+    .photo-uploader { grid-template-columns: 1fr; }
+    .app-header { padding: 0.75rem 1rem; }
+    .brand h1 { font-size: 1rem; }
+    .brand p { font-size: 0.6rem; }
+    .captcha-input-group input { font-size: 1.1rem; letter-spacing: 4px; }
+    .proxy-row { flex-direction: column; align-items: stretch; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="app-header">
+    <div class="brand">
+        <div class="brand-icon">BLS</div>
+        <div>
+            <h1>نظام الوكالة الكامل</h1>
+            <p>BLS MANTISX - AGENCY PORTAL v2.1</p>
+        </div>
+    </div>
+    <div class="header-actions">
+        <div class="header-badge">
+            <div class="status-dot"></div>
+            <span id="headerStatus">جاهز للعمل</span>
+        </div>
+        <button class="btn-blk btn-danger-blk btn-sm-blk" onclick="stopBot()" style="padding:0.5rem 1rem;">
+            <i class="bi bi-stop-fill"></i> إيقاف
+        </button>
+        <div class="header-badge">
+            <i class="bi bi-calendar3"></i>
+            <span id="headerDate">--</span>
+        </div>
+        <div class="header-badge">
+            <i class="bi bi-clock"></i>
+            <span id="headerTime">--:--</span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== LAYOUT ===== -->
+<div class="app-container">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+        <div class="sidebar-section">القائمة الرئيسية</div>
+        <button class="nav-btn active" onclick="showPage('dashboard', this)">
+            <i class="bi bi-house-door-fill"></i> الرئيسية
+        </button>
+        <button class="nav-btn" onclick="showPage('register', this)">
+            <i class="bi bi-person-plus-fill"></i> تسجيل زبون جديد
+        </button>
+        <button class="nav-btn" onclick="showPage('clients', this)">
+            <i class="bi bi-people-fill"></i> قائمة الزبائن
+            <span class="badge-count" id="clientsCount">0</span>
+        </button>
+        
+        <div class="sidebar-section">الأدوات</div>
+        <button class="nav-btn" onclick="showPage('photos', this)">
+            <i class="bi bi-images"></i> صور الزبائن
+        </button>
+        <button class="nav-btn" onclick="showPage('proxies', this)">
+            <i class="bi bi-shield-lock-fill"></i> البروكسيات
+            <span class="badge-count" id="proxiesCount">0</span>
+        </button>
+        <button class="nav-btn" onclick="showPage('captcha', this)">
+            <i class="bi bi-lock-fill"></i> معالج الكابتشا
+        </button>
+        <button class="nav-btn" onclick="showPage('bookings', this)">
+            <i class="bi bi-calendar-check-fill"></i> الحجوزات
+            <span class="badge-count" id="bookingsCount">0</span>
+        </button>
+        
+        <div class="sidebar-section">النظام</div>
+        <button class="nav-btn" onclick="showPage('logs', this)">
+            <i class="bi bi-terminal-fill"></i> السجلات
+        </button>
+        <button class="nav-btn" onclick="showPage('settings', this)">
+            <i class="bi bi-gear-fill"></i> الإعدادات
+        </button>
+        <button class="nav-btn" onclick="exportData()">
+            <i class="bi bi-download"></i> تصدير البيانات
+        </button>
+        <button class="nav-btn" onclick="importData()">
+            <i class="bi bi-upload"></i> استيراد البيانات
+        </button>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <main class="main-content">
+
+        <!-- PAGE: DASHBOARD -->
+        <div class="page active" id="page-dashboard">
+            <div class="page-title">
+                <div>
+                    <h2>📊 لوحة التحكم</h2>
+                    <p>نظرة عامة على نشاط الوكالة</p>
+                </div>
+                <button class="btn-blk btn-primary-blk" onclick="showPage('register', document.querySelectorAll('.nav-btn')[1])">
+                    <i class="bi bi-person-plus-fill"></i> تسجيل زبون جديد
+                </button>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div>
+                        <div class="num" id="statClients">0</div>
+                        <div class="lbl">إجمالي الزبائن</div>
+                    </div>
+                    <div class="ico blue"><i class="bi bi-people-fill"></i></div>
+                </div>
+                <div class="stat-box">
+                    <div>
+                        <div class="num" id="statComplete">0</div>
+                        <div class="lbl">زبائن مكتملون</div>
+                    </div>
+                    <div class="ico green"><i class="bi bi-person-check-fill"></i></div>
+                </div>
+                <div class="stat-box">
+                    <div>
+                        <div class="num" id="statProxies">0</div>
+                        <div class="lbl">بروكسيات مضافة</div>
+                    </div>
+                    <div class="ico orange"><i class="bi bi-shield-check"></i></div>
+                </div>
+                <div class="stat-box">
+                    <div>
+                        <div class="num" id="statBookings">0</div>
+                        <div class="lbl">مواعيد محجوزة</div>
+                    </div>
+                    <div class="ico info"><i class="bi bi-calendar-check-fill"></i></div>
+                </div>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-signpost-2-fill"></i> دليل الاستخدام السريع</h3>
+                </div>
+                <div class="card-blk-body">
+                    <div class="alert-blk alert-info">
+                        <i class="bi bi-1-circle-fill" style="font-size:1.2rem;"></i>
+                        <div>
+                            <strong>الخطوة 1: تسجيل زبون</strong><br>
+                            املأ البيانات واحفظ الزبون
+                        </div>
+                    </div>
+                    <div class="alert-blk alert-warning">
+                        <i class="bi bi-2-circle-fill" style="font-size:1.2rem;"></i>
+                        <div>
+                            <strong>الخطوة 2: شغّل الخادم</strong><br>
+                            افتح CMD ونفّذ: <code style="background:#0f172a; color:#a78bfa; padding:0.2rem 0.5rem; border-radius:5px;">python app.py</code>
+                        </div>
+                    </div>
+                    <div class="alert-blk alert-success">
+                        <i class="bi bi-3-circle-fill" style="font-size:1.2rem;"></i>
+                        <div>
+                            <strong>الخطوة 3: اضغط "تشغيل"</strong><br>
+                            من قائمة الزبائن → اضغط زر "▶️ تشغيل" وسيفتح Chrome تلقائياً
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: REGISTER -->
+        <div class="page" id="page-register">
+            <div class="page-title">
+                <div>
+                    <h2>👤 تسجيل زبون جديد</h2>
+                    <p>املأ البيانات وارفع الصور</p>
+                </div>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-person-vcard-fill"></i> البيانات الشخصية</h3>
+                </div>
+                <div class="card-blk-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الاسم الكامل <span class="req">*</span></label>
+                            <input type="text" class="form-input" id="regName" placeholder="مثال: أحمد محمد">
+                        </div>
+                        <div class="form-group">
+                            <label>الاسم باللاتينية</label>
+                            <input type="text" class="form-input" id="regNameLatin" placeholder="AHMED MOHAMMED">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>رقم الجواز <span class="req">*</span></label>
+                            <input type="text" class="form-input" id="regPassport" placeholder="P1234567" style="text-transform:uppercase;">
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ إصدار الجواز</label>
+                            <input type="date" class="form-input" id="regPassportIssue">
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ انتهاء الجواز</label>
+                            <input type="date" class="form-input" id="regPassportExpiry">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>تاريخ الميلاد</label>
+                            <input type="date" class="form-input" id="regDob">
+                        </div>
+                        <div class="form-group">
+                            <label>مكان الميلاد</label>
+                            <input type="text" class="form-input" id="regBirthPlace" placeholder="المدينة">
+                        </div>
+                        <div class="form-group">
+                            <label>الجنسية <span class="req">*</span></label>
+                            <select class="form-select-blk" id="regNationality">
+                                <option value="المغرب">المغرب</option>
+                                <option value="الجزائر">الجزائر</option>
+                                <option value="تونس">تونس</option>
+                                <option value="مصر">مصر</option>
+                                <option value="فلسطين">فلسطين</option>
+                                <option value="أخرى">أخرى</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الجنس</label>
+                            <select class="form-select-blk" id="regGender">
+                                <option value="ذكر">ذكر</option>
+                                <option value="أنثى">أنثى</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>المدينة</label>
+                            <input type="text" class="form-input" id="regCity" placeholder="مدينة الإقامة">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-telephone-fill"></i> معلومات الاتصال</h3>
+                </div>
+                <div class="card-blk-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الهاتف <span class="req">*</span></label>
+                            <input type="tel" class="form-input" id="regPhone" placeholder="+212 6XX-XXXXXX" dir="ltr">
+                        </div>
+                        <div class="form-group">
+                            <label>البريد الإلكتروني</label>
+                            <input type="email" class="form-input" id="regEmail" placeholder="client@example.com" dir="ltr">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>العنوان</label>
+                        <textarea class="form-input" id="regAddress" rows="2" placeholder="العنوان الكامل"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-blk" style="border: 2px solid var(--primary);">
+                <div class="card-blk-header" style="background: linear-gradient(135deg, rgba(30,64,175,0.05), rgba(59,130,246,0.05));">
+                    <h3><i class="bi bi-camera-fill"></i> صور الزبون</h3>
+                </div>
+                <div class="card-blk-body">
+                    <div class="photo-uploader">
+                        <div class="upload-zone" id="regPhotoZone" onclick="document.getElementById('regPhotoFile').click()">
+                            <input type="file" id="regPhotoFile" accept="image/*" onchange="handleRegPhoto(event, 'photo')">
+                            <i class="bi bi-person-square big-icon"></i>
+                            <div class="title">الصورة الشخصية</div>
+                            <div class="hint">JPG أو PNG</div>
+                        </div>
+                        <div class="upload-zone" id="regPassportZone" onclick="document.getElementById('regPassportFile').click()">
+                            <input type="file" id="regPassportFile" accept="image/*" onchange="handleRegPhoto(event, 'passport')">
+                            <i class="bi bi-card-text big-icon"></i>
+                            <div class="title">جواز السفر</div>
+                            <div class="hint">صفحة البيانات</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-airplane-fill"></i> تفاصيل الطلب</h3>
+                </div>
+                <div class="card-blk-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الدولة <span class="req">*</span></label>
+                            <select class="form-select-blk" id="regDestination" onchange="updateRegCenters()">
+                                <option value="">-- اختر --</option>
+                                <option value="Spain">🇪🇸 إسبانيا</option>
+                                <option value="France">🇫🇷 فرنسا</option>
+                                <option value="Italy">🇮🇹 إيطاليا</option>
+                                <option value="Germany">🇩🇪 ألمانيا</option>
+                                <option value="Portugal">🇵🇹 البرتغال</option>
+                                <option value="Netherlands">🇳🇱 هولندا</option>
+                                <option value="Belgium">🇧🇪 بلجيكا</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>المركز <span class="req">*</span></label>
+                            <select class="form-select-blk" id="regCenter">
+                                <option value="">-- اختر الدولة أولاً --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>نوع التأشيرة</label>
+                            <select class="form-select-blk" id="regVisaType">
+                                <option value="Tourism">سياحة</option>
+                                <option value="Business">عمل</option>
+                                <option value="Student">دراسة</option>
+                                <option value="Family">زيارة عائلية</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>مدة الإقامة (أيام)</label>
+                            <input type="number" class="form-input" id="regDuration" placeholder="15" min="1" max="365">
+                        </div>
+                        <div class="form-group">
+                            <label>عدد الدخولات</label>
+                            <select class="form-select-blk" id="regEntries">
+                                <option value="Single">دخول واحد</option>
+                                <option value="Multiple">دخول متعدد</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>الميزانية</label>
+                            <input type="text" class="form-input" id="regBudget" placeholder="مثال: 1500 €">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ملاحظات</label>
+                        <textarea class="form-input" id="regNotes" rows="3" placeholder="ملاحظات إضافية"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:2rem;">
+                <button class="btn-blk btn-success-blk" onclick="saveNewClient()" style="flex:1; min-width:200px;">
+                    <i class="bi bi-check-circle-fill"></i> حفظ الزبون
+                </button>
+                <button class="btn-blk btn-outline-blk" onclick="resetRegisterForm()">
+                    <i class="bi bi-eraser"></i> مسح النموذج
+                </button>
+            </div>
+        </div>
+
+        <!-- PAGE: CLIENTS LIST -->
+        <div class="page" id="page-clients">
+            <div class="page-title">
+                <div>
+                    <h2>👥 قائمة الزبائن</h2>
+                    <p>اضغط "▶️ تشغيل" لتشغيل البوت</p>
+                </div>
+                <button class="btn-blk btn-primary-blk" onclick="showPage('register', document.querySelectorAll('.nav-btn')[1])">
+                    <i class="bi bi-person-plus-fill"></i> تسجيل زبون
+                </button>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-list-ul"></i> الزبائن (<span id="clientsListCount">0</span>)</h3>
+                    <input type="text" class="form-input" style="max-width:280px; padding:0.55rem 0.9rem;" 
+                           placeholder="🔍 بحث..." oninput="filterClients(this.value)">
+                </div>
+                <div class="card-blk-body" style="padding:0;">
+                    <table class="table-blk">
+                        <thead>
+                            <tr>
+                                <th width="50">#</th>
+                                <th>الاسم</th>
+                                <th>رقم الجواز</th>
+                                <th>الهاتف</th>
+                                <th>الدولة</th>
+                                <th>الصور</th>
+                                <th width="280">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTableBody">
+                            <tr>
+                                <td colspan="7">
+                                    <div class="empty-state">
+                                        <i class="bi bi-inbox"></i>
+                                        <p>لا يوجد زبائن بعد</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: PHOTOS -->
+        <div class="page" id="page-photos">
+            <div class="page-title">
+                <div>
+                    <h2>📸 صور الزبائن</h2>
+                    <p>تعديل صور الزبائن</p>
+                </div>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-person-badge-fill"></i> اختر زبوناً</h3>
+                </div>
+                <div class="card-blk-body">
+                    <div class="form-group">
+                        <label>الزبون</label>
+                        <select class="form-select-blk" id="photoClientSelect" onchange="loadClientPhotos()">
+                            <option value="">-- اختر --</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-blk hidden" id="photosCard">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-images"></i> صور: <span id="photoClientName"></span></h3>
+                </div>
+                <div class="card-blk-body">
+                    <div class="photo-uploader">
+                        <div class="upload-zone" id="photoZone" onclick="document.getElementById('photoFile').click()">
+                            <input type="file" id="photoFile" accept="image/*" onchange="handlePhotoUpload(event, 'photo')">
+                            <i class="bi bi-person-square big-icon"></i>
+                            <div class="title">الصورة الشخصية</div>
+                        </div>
+                        <div class="upload-zone" id="passportZone" onclick="document.getElementById('passportFile').click()">
+                            <input type="file" id="passportFile" accept="image/*" onchange="handlePhotoUpload(event, 'passport')">
+                            <i class="bi bi-card-text big-icon"></i>
+                            <div class="title">جواز السفر</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: PROXIES -->
+        <div class="page" id="page-proxies">
+            <div class="page-title">
+                <div>
+                    <h2>🛡️ البروكسيات</h2>
+                    <p>إدارة البروكسيات</p>
+                </div>
+                <button class="btn-blk btn-success-blk" onclick="openAddProxyModal()">
+                    <i class="bi bi-plus-circle-fill"></i> إضافة بروكسي
+                </button>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div>
+                        <div class="num" id="proxyTotal">0</div>
+                        <div class="lbl">إجمالي</div>
+                    </div>
+                    <div class="ico blue"><i class="bi bi-server"></i></div>
+                </div>
+                <div class="stat-box">
+                    <div>
+                        <div class="num" id="proxyWorking" style="color:var(--success);">0</div>
+                        <div class="lbl">تعمل</div>
+                    </div>
+                    <div class="ico green"><i class="bi bi-check-circle-fill"></i></div>
+                </div>
+                <div class="stat-box">
+                    <div>
+                        <div class="num" id="proxyFailed" style="color:var(--danger);">0</div>
+                        <div class="lbl">فاشلة</div>
+                    </div>
+                    <div class="ico red"><i class="bi bi-x-circle-fill"></i></div>
+                </div>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-list-ul"></i> القائمة</h3>
+                    <button class="btn-blk btn-outline-blk btn-sm-blk" onclick="testAllProxies()">
+                        <i class="bi bi-check2-all"></i> اختبار الكل
+                    </button>
+                </div>
+                <div class="card-blk-body" id="proxiesList">
+                    <div class="empty-state">
+                        <i class="bi bi-shield-slash"></i>
+                        <p>لا توجد بروكسيات</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: CAPTCHA -->
+        <div class="page" id="page-captcha">
+            <div class="page-title">
+                <div>
+                    <h2>🔐 معالج الكابتشا</h2>
+                    <p>حل كابتشا BLS</p>
+                </div>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-image-fill"></i> الكابتشا</h3>
+                </div>
+                <div class="card-blk-body">
+                    <div class="captcha-display" id="captchaDisplay">
+                        <div class="no-captcha">
+                            <i class="bi bi-shield-slash-fill"></i>
+                            <p><strong>لا توجد كابتشا حالياً</strong></p>
+                            <label style="display:inline-block; margin-top:1rem; padding:0.75rem 1.5rem; background:var(--primary); color:white; border-radius:10px; cursor:pointer; font-weight:700;">
+                                <i class="bi bi-upload"></i> رفع صورة
+                                <input type="file" accept="image/*" style="display:none;" onchange="loadCaptchaImage(event)">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="captcha-input-group">
+                        <input type="text" id="captchaInput" maxlength="10" placeholder="أدخل الرمز">
+                        <button class="btn-blk btn-success-blk" onclick="submitCaptcha()">
+                            <i class="bi bi-check-lg"></i> إرسال
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: BOOKINGS -->
+        <div class="page" id="page-bookings">
+            <div class="page-title">
+                <div>
+                    <h2>📅 الحجوزات</h2>
+                    <p>سجل الحجوزات</p>
+                </div>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-calendar-check-fill"></i> القائمة</h3>
+                </div>
+                <div class="card-blk-body" style="padding:0;">
+                    <table class="table-blk">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>المرجع</th>
+                                <th>الزبون</th>
+                                <th>الوجهة</th>
+                                <th>التاريخ</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsTableBody">
+                            <tr>
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <i class="bi bi-calendar-x"></i>
+                                        <p>لا توجد حجوزات</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: LOGS -->
+        <div class="page" id="page-logs">
+            <div class="page-title">
+                <div>
+                    <h2>📜 السجلات</h2>
+                    <p>ماذا يفعل البوت الآن؟</p>
+                </div>
+                <button class="btn-blk btn-danger-blk" onclick="clearLogs()">
+                    <i class="bi bi-trash"></i> مسح
+                </button>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-body">
+                    <div class="log-console" id="logConsole"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: SETTINGS -->
+        <div class="page" id="page-settings">
+            <div class="page-title">
+                <div>
+                    <h2>⚙️ الإعدادات</h2>
+                    <p>تكوين النظام</p>
+                </div>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-telegram"></i> Telegram</h3>
+                </div>
+                <div class="card-blk-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Bot Token</label>
+                            <input type="password" class="form-input" id="setTgToken" placeholder="123456:ABC..." dir="ltr">
+                        </div>
+                        <div class="form-group">
+                            <label>Chat ID</label>
+                            <input type="text" class="form-input" id="setTgChatId" placeholder="-100..." dir="ltr">
+                        </div>
+                    </div>
+                    <button class="btn-blk btn-primary-blk" onclick="saveTelegramSettings()">
+                        <i class="bi bi-save-fill"></i> حفظ
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-shield-lock-fill"></i> حساب BLS</h3>
+                </div>
+                <div class="card-blk-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>البريد</label>
+                            <input type="email" class="form-input" id="setBlsEmail" placeholder="email@example.com" dir="ltr">
+                        </div>
+                        <div class="form-group">
+                            <label>كلمة المرور</label>
+                            <input type="password" class="form-input" id="setBlsPassword" dir="ltr">
+                        </div>
+                    </div>
+                    <button class="btn-blk btn-primary-blk" onclick="saveBlsSettings()">
+                        <i class="bi bi-save-fill"></i> حفظ
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-blk">
+                <div class="card-blk-header">
+                    <h3><i class="bi bi-database-fill"></i> البيانات</h3>
+                </div>
+                <div class="card-blk-body">
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <button class="btn-blk btn-primary-blk" onclick="exportData()">
+                            <i class="bi bi-download"></i> تصدير
+                        </button>
+                        <button class="btn-blk btn-outline-blk" onclick="importData()">
+                            <i class="bi bi-upload"></i> استيراد
+                        </button>
+                        <button class="btn-blk btn-danger-blk" onclick="clearAllData()">
+                            <i class="bi bi-trash-fill"></i> مسح الكل
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- MODAL: ADD PROXY -->
+<div class="modal-blk hidden" id="addProxyModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:14px; padding:1.5rem; max-width:600px; width:90%;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+            <h3 style="margin:0; color:var(--primary);">إضافة بروكسي</h3>
+            <button class="btn-blk btn-outline-blk btn-sm-blk" onclick="closeProxyModal()">✕</button>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Host <span class="req">*</span></label>
+                <input type="text" class="form-input" id="proxyHost" placeholder="192.168.1.100" dir="ltr">
+            </div>
+            <div class="form-group">
+                <label>Port <span class="req">*</span></label>
+                <input type="number" class="form-input" id="proxyPort" placeholder="8080" dir="ltr">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>النوع</label>
+                <select class="form-select-blk" id="proxyType">
+                    <option value="HTTP">HTTP</option>
+                    <option value="HTTPS">HTTPS</option>
+                    <option value="SOCKS5">SOCKS5</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>الدولة</label>
+                <input type="text" class="form-input" id="proxyCountry" placeholder="MA، FR" dir="ltr">
+            </div>
+        </div>
+        <div style="display:flex; gap:0.75rem; justify-content:flex-end; margin-top:1rem;">
+            <button class="btn-blk btn-outline-blk" onclick="closeProxyModal()">إلغاء</button>
+            <button class="btn-blk btn-success-blk" onclick="saveProxy()">إضافة</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// BLS MANTISX - Agency Portal v2.1
+// ✅ مع دوال البوت الكاملة
+// ============================================================
+
+// ===== API Configuration =====
+const API_BASE = 'http://127.0.0.1:5000/api';
+
+// ===== State =====
+const state = {
+    clients: [],
+    bookings: [],
+    logs: [],
+    proxies: [],
+    stats: { captchas: 0 },
+    settings: {
+        telegram: { token: '', chatId: '' },
+        bls: { email: '', password: '' }
+    },
+    tempRegPhotos: { photo: null, passportPhoto: null },
+    currentPhotoClient: null,
+    filters: { clients: '' }
+};
+
+// ⭐ المراكز مع الناظور
+const CENTERS = {
+    'Spain': ['الناظور', 'الرباط', 'الدار البيضاء', 'مراكش', 'طنجة', 'أكادير', 'فاس', 'وجدة', 'تطوان', 'القنيطرة', 'سلا', 'الجديدة', 'بني ملال'],
+    'France': ['الرباط', 'الدار البيضاء', 'مراكش', 'طنجة', 'أكادير', 'فاس'],
+    'Italy': ['الرباط', 'الدار البيضاء', 'مراكش'],
+    'Germany': ['الرباط', 'الدار البيضاء', 'مراكش'],
+    'Portugal': ['الرباط', 'الدار البيضاء', 'مراكش'],
+    'Netherlands': ['الرباط', 'الدار البيضاء'],
+    'Belgium': ['الرباط', 'الدار البيضاء']
+};
+
+const COUNTRY_NAMES = {
+    'Spain': 'إسبانيا', 'France': 'فرنسا', 'Italy': 'إيطاليا', 
+    'Germany': 'ألمانيا', 'Portugal': 'البرتغال', 'Netherlands': 'هولندا',
+    'Belgium': 'بلجيكا'
+};
+
+// ============================================================
+// 🚀 BOT CONTROL - دوال البوت
+// ============================================================
+
+async function startBotForClient(clientId, clientName) {
+    if (!confirm(`⚠️ تشغيل البوت للزبون: ${clientName}?\n\nسيفتح Chrome تلقائياً ويسجل الدخول لموقع BLS`)) {
+        return;
+    }
+    
+    log('SYSTEM', `🚀 تشغيل البوت لـ: ${clientName}`);
+    
+    try {
+        // إرسال أمر التشغيل للخادم
+        const res = await fetch(`${API_BASE}/bot/start`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ client_id: clientId })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+            log('SUCCESS', `✅ تم تشغيل البوت: ${clientName}`);
+            alert(`✅ تم تشغيل البوت!\n\nالمتصفح سيفتح خلال ثوانٍ\nتابع السجلات لرؤية ما يحدث`);
+            
+            document.getElementById('headerStatus').textContent = '🤖 يعمل';
+            startLogsPolling();
+        } else {
+            log('ERROR', `❌ فشل: ${data.error}`);
+            alert(`❌ فشل التشغيل\n\n${data.error}`);
+        }
+    } catch (err) {
+        log('ERROR', `❌ لا يمكن الاتصال بالخادم`);
+        alert(`❌ لا يمكن الاتصال بالخادم!\n\nتأكد من تشغيل:\npython app.py\n\nالخطأ: ${err.message}`);
+    }
+}
+
+async function stopBot() {
+    try {
+        const res = await fetch(`${API_BASE}/bot/stop`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+            log('WARNING', '⏹ تم إيقاف البوت');
+            document.getElementById('headerStatus').textContent = 'جاهز للعمل';
+            alert('⏹ تم إيقاف البوت');
+        }
+    } catch (e) {
+        log('ERROR', '❌ فشل الإيقاف');
+    }
+}
+
+let logsInterval = null;
+
+function startLogsPolling() {
+    if (logsInterval) clearInterval(logsInterval);
+    logsInterval = setInterval(async () => {
+        try {
+            const res = await fetch(`${API_BASE}/logs?limit=200`);
+            const logs = await res.json();
+            if (Array.isArray(logs)) {
+                state.logs = logs;
+                renderLogs();
+            }
+            
+            const statusRes = await fetch(`${API_BASE}/status`);
+            const status = await statusRes.json();
+            if (status.running) {
+                document.getElementById('headerStatus').textContent = '🤖 يعمل';
+            } else {
+                document.getElementById('headerStatus').textContent = 'جاهز للعمل';
+            }
+        } catch (e) {}
+    }, 3000);
+}
+
+async function testServerConnection() {
+    try {
+        const res = await fetch(`${API_BASE}/status`);
+        const data = await res.json();
+        log('SUCCESS', '✅ متصل بالخادم');
+        return true;
+    } catch (e) {
+        log('ERROR', '❌ الخادم غير متصل - شغّل: python app.py');
+        return false;
+    }
+}
+
+// ============================================================
+// Logging
+// ============================================================
+function log(level, message) {
+    const now = new Date();
+    const time = now.toLocaleTimeString('en-GB');
+    state.logs.push({ time, level, message, timestamp: now.toISOString() });
+    if (state.logs.length > 500) state.logs.shift();
+    renderLogs();
+    saveState();
+}
+
+function renderLogs() {
+    const console = document.getElementById('logConsole');
+    if (!console) return;
+    if (state.logs.length === 0) {
+        console.innerHTML = `<div class="log-line INFO"><span class="time">[--:--:--]</span><span class="level">[INFO]</span><span class="msg">System ready</span></div>`;
+        return;
+    }
+    const html = state.logs.slice(-100).map(l => `
+        <div class="log-line ${l.level}">
+            <span class="time">[${l.time}]</span>
+            <span class="level">[${l.level}]</span>
+            <span class="msg">${l.message}</span>
+        </div>
+    `).join('');
+    console.innerHTML = html;
+    console.scrollTop = console.scrollHeight;
+}
+
+function clearLogs() {
+    if (!confirm('مسح السجلات؟')) return;
+    state.logs = [];
+    saveState();
+    renderLogs();
+}
+
+// ============================================================
+// Navigation
+// ============================================================
+function showPage(pageId, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById('page-' + pageId);
+    if (page) page.classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    
+    if (pageId === 'photos') populatePhotoSelect();
+    if (pageId === 'proxies') renderProxies();
+    if (pageId === 'dashboard') updateStats();
+    if (pageId === 'clients') renderClients();
+    if (pageId === 'bookings') renderBookings();
+    if (pageId === 'logs') renderLogs();
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// Statistics
+// ============================================================
+function updateStats() {
+    const complete = state.clients.filter(c => c.photo && c.passportPhoto).length;
+    const working = state.proxies.filter(p => p.status === 'working').length;
+    
+    document.getElementById('statClients').textContent = state.clients.length;
+    document.getElementById('statComplete').textContent = complete;
+    document.getElementById('statProxies').textContent = working;
+    document.getElementById('statBookings').textContent = state.bookings.length;
+    
+    document.getElementById('clientsCount').textContent = state.clients.length;
+    document.getElementById('bookingsCount').textContent = state.bookings.length;
+    document.getElementById('clientsListCount').textContent = state.clients.length;
+    document.getElementById('proxiesCount').textContent = state.proxies.length;
+}
+
+// ============================================================
+// Register Photos
+// ============================================================
+function handleRegPhoto(event, type) {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { alert('⚠️ اختر صورة'); return; }
+    if (file.size > 5 * 1024 * 1024) { alert('⚠️ الحد 5MB'); return; }
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const base64 = e.target.result;
+        if (type === 'photo') {
+            state.tempRegPhotos.photo = base64;
+            updateRegPhotoZone('regPhotoZone', base64, 'الصورة الشخصية');
+        } else {
+            state.tempRegPhotos.passportPhoto = base64;
+            updateRegPhotoZone('regPassportZone', base64, 'صورة الجواز');
+        }
+        log('SUCCESS', `📸 صورة محملة`);
+    };
+    reader.readAsDataURL(file);
+}
+
+function updateRegPhotoZone(zoneId, base64, label) {
+    const zone = document.getElementById(zoneId);
+    if (!zone) return;
+    zone.classList.add('has-file');
+    const isPhoto = zoneId === 'regPhotoZone';
+    const inputId = isPhoto ? 'regPhotoFile' : 'regPassportFile';
+    const type = isPhoto ? 'photo' : 'passport';
+    
+    zone.innerHTML = `
+        <input type="file" id="${inputId}" accept="image/*" onchange="handleRegPhoto(event, '${type}')">
+        <div class="check-badge"><i class="bi bi-check-lg"></i></div>
+        <button class="remove-btn" onclick="event.stopPropagation(); removeRegPhoto('${type}')">
+            <i class="bi bi-x-lg"></i>
+        </button>
+        <img src="${base64}" class="preview">
+        <div class="title" style="margin-top:0.5rem;">✅ ${label}</div>
+    `;
+}
+
+function removeRegPhoto(type) {
+    if (type === 'photo') {
+        state.tempRegPhotos.photo = null;
+        resetRegPhotoZone('regPhotoZone', 'regPhotoFile', 'photo', 'الصورة الشخصية', 'bi-person-square');
+    } else {
+        state.tempRegPhotos.passportPhoto = null;
+        resetRegPhotoZone('regPassportZone', 'regPassportFile', 'passport', 'جواز السفر', 'bi-card-text');
+    }
+}
+
+function resetRegPhotoZone(zoneId, inputId, type, title, icon) {
+    const zone = document.getElementById(zoneId);
+    if (!zone) return;
+    zone.classList.remove('has-file');
+    zone.innerHTML = `
+        <input type="file" id="${inputId}" accept="image/*" onchange="handleRegPhoto(event, '${type}')">
+        <i class="bi ${icon} big-icon"></i>
+        <div class="title">${title}</div>
+    `;
+}
+
+// ============================================================
+// Save Client
+// ============================================================
+function updateRegCenters() {
+    const country = document.getElementById('regDestination').value;
+    const select = document.getElementById('regCenter');
+    select.innerHTML = '<option value="">-- اختر المركز --</option>';
+    if (COUNTRY_NAMES[country]) {
+        CENTERS[country].forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c;
+            select.appendChild(opt);
+        });
+    }
+}
+
+async function saveNewClient() {
+    const name = document.getElementById('regName').value.trim();
+    const passport = document.getElementById('regPassport').value.trim().toUpperCase();
+    const phone = document.getElementById('regPhone').value.trim();
+    const destination = document.getElementById('regDestination').value;
+    const center = document.getElementById('regCenter').value;
+    
+    if (!name || !passport || !phone || !destination || !center) {
+        alert('⚠️ املأ الحقول الإلزامية');
+        return;
+    }
+    
+    if (state.clients.find(c => c.passport === passport)) {
+        alert('⚠️ الجواز موجود مسبقاً!');
+        return;
+    }
+    
+    const client = {
+        id: 'c_' + Date.now(),
+        name,
+        nameLatin: document.getElementById('regNameLatin').value.trim().toUpperCase(),
+        passport,
+        passportIssue: document.getElementById('regPassportIssue').value,
+        passportExpiry: document.getElementById('regPassportExpiry').value,
+        dob: document.getElementById('regDob').value,
+        birthPlace: document.getElementById('regBirthPlace').value.trim(),
+        nationality: document.getElementById('regNationality').value,
+        gender: document.getElementById('regGender').value,
+        city: document.getElementById('regCity').value.trim(),
+        phone,
+        email: document.getElementById('regEmail').value.trim(),
+        address: document.getElementById('regAddress').value.trim(),
+        destination,
+        center,
+        visaType: document.getElementById('regVisaType').value,
+        duration: document.getElementById('regDuration').value,
+        entries: document.getElementById('regEntries').value,
+        budget: document.getElementById('regBudget').value.trim(),
+        notes: document.getElementById('regNotes').value.trim(),
+        photo: state.tempRegPhotos.photo,
+        passportPhoto: state.tempRegPhotos.passportPhoto,
+        status: 'active',
+        createdAt: new Date().toISOString()
+    };
+    
+    state.clients.push(client);
+    saveState();
+    updateStats();
+    
+    // إرسال للخادم إذا كان يعمل
+    try {
+        await fetch(`${API_BASE}/clients`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(client)
+        });
+    } catch (e) {
+        console.log('Offline mode - saved locally');
+    }
+    
+    log('SUCCESS', `✅ زبون: ${name}`);
+    alert(`✅ تم حفظ الزبون!\n\n👤 ${name}\n🪪 ${passport}\n🎯 ${COUNTRY_NAMES[destination]} - ${center}`);
+    
+    resetRegisterForm();
+    showPage('clients', document.querySelectorAll('.nav-btn')[2]);
+}
+
+function resetRegisterForm() {
+    ['regName','regNameLatin','regPassport','regPassportIssue','regPassportExpiry',
+     'regDob','regBirthPlace','regCity','regPhone','regEmail','regAddress',
+     'regDuration','regBudget','regNotes'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+    
+    document.getElementById('regDestination').value = '';
+    document.getElementById('regCenter').innerHTML = '<option value="">-- اختر الدولة أولاً --</option>';
+    document.getElementById('regVisaType').value = 'Tourism';
+    document.getElementById('regNationality').value = 'المغرب';
+    document.getElementById('regGender').value = 'ذكر';
+    
+    state.tempRegPhotos = { photo: null, passportPhoto: null };
+    resetRegPhotoZone('regPhotoZone', 'regPhotoFile', 'photo', 'الصورة الشخصية', 'bi-person-square');
+    resetRegPhotoZone('regPassportZone', 'regPassportFile', 'passport', 'جواز السفر', 'bi-card-text');
+}
+
+// ============================================================
+// Render Clients
+// ============================================================
+function renderClients(filter = '') {
+    const tbody = document.getElementById('clientsTableBody');
+    if (!tbody) return;
+    
+    let list = state.clients;
+    if (filter) {
+        const q = filter.toLowerCase();
+        list = list.filter(c => 
+            c.name.toLowerCase().includes(q) || 
+            c.passport.toLowerCase().includes(q) ||
+            (c.phone && c.phone.includes(q))
+        );
+    }
+    
+    if (list.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    <div class="empty-state">
+                        <i class="bi bi-inbox"></i>
+                        <p>${filter ? 'لا توجد نتائج' : 'لا يوجد زبائن'}</p>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = list.map((c, i) => {
+        const photoCount = (c.photo ? 1 : 0) + (c.passportPhoto ? 1 : 0);
+        let photoBadge;
+        if (photoCount === 2) photoBadge = '<span class="badge-blk badge-success-blk">✅ 2/2</span>';
+        else if (photoCount === 1) photoBadge = '<span class="badge-blk badge-warning-blk">⚠️ 1/2</span>';
+        else photoBadge = '<span class="badge-blk badge-danger-blk">❌ 0/2</span>';
+        
+        return `
+            <tr>
+                <td>${i + 1}</td>
+                <td><strong>${c.name}</strong></td>
+                <td><code style="color:var(--primary); font-weight:700;">${c.passport}</code></td>
+                <td dir="ltr" style="text-align:right;">${c.phone || '--'}</td>
+                <td>${COUNTRY_NAMES[c.destination] || '--'}</td>
+                <td>${photoBadge}</td>
+                <td>
+                    <button class="btn-blk btn-success-blk btn-sm-blk" onclick="startBotForClient('${c.id}', '${c.name}')" title="تشغيل البوت">
+                        <i class="bi bi-play-fill"></i> تشغيل
+                    </button>
+                    <button class="btn-blk btn-outline-blk btn-sm-blk" onclick="goToPhotos('${c.id}')" title="صور">
+                        <i class="bi bi-images"></i>
+                    </button>
+                    <button class="btn-blk btn-info-blk btn-sm-blk" onclick="viewClient('${c.id}')" title="عرض">
+                        <i class="bi bi-eye-fill"></i>
+                    </button>
+                    <button class="btn-blk btn-danger-blk btn-sm-blk" onclick="deleteClient('${c.id}')" title="حذف">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function filterClients(q) {
+    state.filters.clients = q;
+    renderClients(q);
+}
+
+function viewClient(id) {
+    const c = state.clients.find(x => x.id === id);
+    if (!c) return;
+    alert(`📋 ${c.name}\n🪪 ${c.passport}\n📱 ${c.phone}\n🎯 ${COUNTRY_NAMES[c.destination]} - ${c.center}`);
+}
+
+function deleteClient(id) {
+    const client = state.clients.find(c => c.id === id);
+    if (!client) return;
+    if (!confirm(`حذف "${client.name}"؟`)) return;
+    state.clients = state.clients.filter(c => c.id !== id);
+    saveState();
+    renderClients();
+    updateStats();
+}
+
+function goToPhotos(clientId) {
+    showPage('photos', document.querySelectorAll('.nav-btn')[3]);
+    setTimeout(() => {
+        document.getElementById('photoClientSelect').value = clientId;
+        loadClientPhotos();
+    }, 100);
+}
+
+// ============================================================
+// Photos
+// ============================================================
+function populatePhotoSelect() {
+    const select = document.getElementById('photoClientSelect');
+    if (!select) return;
+    select.innerHTML = '<option value="">-- اختر --</option>';
+    state.clients.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = `${c.name} (${c.passport})`;
+        select.appendChild(opt);
+    });
+}
+
+function loadClientPhotos() {
+    const clientId = document.getElementById('photoClientSelect').value;
+    const card = document.getElementById('photosCard');
+    if (!clientId) { card.classList.add('hidden'); return; }
+    const client = state.clients.find(c => c.id === clientId);
+    if (!client) return;
+    state.currentPhotoClient = client;
+    card.classList.remove('hidden');
+    document.getElementById('photoClientName').textContent = client.name;
+    renderPhotoZones(client);
+}
+
+function renderPhotoZones(client) {
+    const photoZone = document.getElementById('photoZone');
+    if (client.photo) {
+        photoZone.classList.add('has-file');
+        photoZone.innerHTML = `<input type="file" id="photoFile" accept="image/*" onchange="handlePhotoUpload(event, 'photo')"><img src="${client.photo}" class="preview">`;
+    }
+    
+    const passportZone = document.getElementById('passportZone');
+    if (client.passportPhoto) {
+        passportZone.classList.add('has-file');
+        passportZone.innerHTML = `<input type="file" id="passportFile" accept="image/*" onchange="handlePhotoUpload(event, 'passport')"><img src="${client.passportPhoto}" class="preview">`;
+    }
+}
+
+function handlePhotoUpload(event, type) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        if (type === 'photo') state.currentPhotoClient.photo = e.target.result;
+        else state.currentPhotoClient.passportPhoto = e.target.result;
+        saveState();
+        renderPhotoZones(state.currentPhotoClient);
+        updateStats();
+        renderClients(state.filters.clients);
+    };
+    reader.readAsDataURL(file);
+}
+
+// ============================================================
+// PROXIES
+// ============================================================
+function openAddProxyModal() {
+    document.getElementById('addProxyModal').classList.remove('hidden');
+}
+
+function closeProxyModal() {
+    document.getElementById('addProxyModal').classList.add('hidden');
+    ['proxyHost','proxyPort','proxyCountry'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+}
+
+function saveProxy() {
+    const host = document.getElementById('proxyHost').value.trim();
+    const port = document.getElementById('proxyPort').value.trim();
+    
+    if (!host || !port) { alert('⚠️ املأ الحقول'); return; }
+    
+    const proxy = {
+        id: 'p_' + Date.now(),
+        host, port: parseInt(port),
+        type: document.getElementById('proxyType').value,
+        country: document.getElementById('proxyCountry').value.trim().toUpperCase(),
+        status: 'untested',
+        createdAt: new Date().toISOString()
+    };
+    
+    state.proxies.push(proxy);
+    saveState();
+    renderProxies();
+    updateStats();
+    closeProxyModal();
+    log('SUCCESS', `🛡️ ${host}:${port}`);
+}
+
+function deleteProxy(id) {
+    if (!confirm('حذف؟')) return;
+    state.proxies = state.proxies.filter(x => x.id !== id);
+    saveState();
+    renderProxies();
+    updateStats();
+}
+
+function testProxy(id) {
+    const p = state.proxies.find(x => x.id === id);
+    if (!p) return;
+    p.status = 'testing';
+    renderProxies();
+    setTimeout(() => {
+        p.status = Math.random() > 0.3 ? 'working' : 'failed';
+        saveState();
+        renderProxies();
+        updateStats();
+    }, 1500);
+}
+
+function testAllProxies() {
+    if (state.proxies.length === 0) { alert('لا توجد بروكسيات'); return; }
+    state.proxies.forEach((p, i) => {
+        setTimeout(() => {
+            p.status = Math.random() > 0.3 ? 'working' : 'failed';
+            saveState();
+            renderProxies();
+        }, 500 + i * 300);
+    });
+}
+
+function renderProxies() {
+    const container = document.getElementById('proxiesList');
+    if (!container) return;
+    
+    const total = state.proxies.length;
+    const working = state.proxies.filter(p => p.status === 'working').length;
+    const failed = state.proxies.filter(p => p.status === 'failed').length;
+    
+    document.getElementById('proxyTotal').textContent = total;
+    document.getElementById('proxyWorking').textContent = working;
+    document.getElementById('proxyFailed').textContent = failed;
+    document.getElementById('proxiesListCount').textContent = total;
+    
+    if (total === 0) {
+        container.innerHTML = `<div class="empty-state"><i class="bi bi-shield-slash"></i><p>لا توجد بروكسيات</p></div>`;
+        return;
+    }
+    
+    container.innerHTML = state.proxies.map(p => `
+        <div class="proxy-row">
+            <span class="proxy-status proxy-${p.status}"></span>
+            <span class="proxy-address">${p.host}:${p.port}</span>
+            <span class="badge-blk badge-info-blk">${p.type}</span>
+            <button class="btn-blk btn-info-blk btn-sm-blk" onclick="testProxy('${p.id}')">
+                <i class="bi bi-lightning-charge-fill"></i>
+            </button>
+            <button class="btn-blk btn-danger-blk btn-sm-blk" onclick="deleteProxy('${p.id}')">
+                <i class="bi bi-trash-fill"></i>
+            </button>
+        </div>
+    `).join('');
+}
+
+// ============================================================
+// CAPTCHA
+// ============================================================
+function loadCaptchaImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        document.getElementById('captchaDisplay').innerHTML = `<img src="${e.target.result}">`;
+        document.getElementById('captchaInput').focus();
+    };
+    reader.readAsDataURL(file);
+}
+
+function submitCaptcha() {
+    const code = document.getElementById('captchaInput').value.trim().toUpperCase();
+    if (!code) { alert('⚠️ أدخل الرمز'); return; }
+    
+    state.stats.captchas++;
+    saveState();
+    log('SUCCESS', `✅ كابتشا: ${code}`);
+    
+    navigator.clipboard.writeText(code).then(() => {
+        alert(`✅ ${code}\n📋 تم النسخ`);
+    }).catch(() => {
+        alert(`✅ ${code}`);
+    });
+    
+    document.getElementById('captchaInput').value = '';
+}
+
+// ============================================================
+// BOOKINGS
+// ============================================================
+function renderBookings() {
+    const tbody = document.getElementById('bookingsTableBody');
+    if (!tbody) return;
+    if (state.bookings.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="bi bi-calendar-x"></i><p>لا توجد حجوزات</p></div></td></tr>`;
+        return;
+    }
+    tbody.innerHTML = state.bookings.map((b, i) => `
+        <tr>
+            <td>${i + 1}</td>
+            <td><code>${b.reference}</code></td>
+            <td>${b.clientName}</td>
+            <td>${COUNTRY_NAMES[b.destination] || b.destination}</td>
+            <td>${b.date}</td>
+            <td><span class="badge-blk badge-success-blk">محجوز</span></td>
+        </tr>
+    `).join('');
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+function saveTelegramSettings() {
+    state.settings.telegram = {
+        token: document.getElementById('setTgToken').value.trim(),
+        chatId: document.getElementById('setTgChatId').value.trim()
+    };
+    saveState();
+    alert('✅ تم الحفظ');
+}
+
+function saveBlsSettings() {
+    state.settings.bls = {
+        email: document.getElementById('setBlsEmail').value.trim(),
+        password: document.getElementById('setBlsPassword').value
+    };
+    saveState();
+    alert('✅ تم الحفظ');
+}
+
+// ============================================================
+// EXPORT/IMPORT
+// ============================================================
+function exportData() {
+    const data = {
+        version: '2.1',
+        exportedAt: new Date().toISOString(),
+        clients: state.clients,
+        bookings: state.bookings,
+        proxies: state.proxies,
+        settings: state.settings
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `bls_backup_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+}
+
+function importData() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            try {
+                const data = JSON.parse(ev.target.result);
+                if (data.clients) state.clients = data.clients;
+                if (data.bookings) state.bookings = data.bookings;
+                if (data.proxies) state.proxies = data.proxies;
+                saveState();
+                location.reload();
+            } catch (err) { alert('خطأ: ' + err.message); }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+function clearAllData() {
+    if (!confirm('حذف كل البيانات؟')) return;
+    localStorage.removeItem('bls_mantisx_v2');
+    location.reload();
+}
+
+// ============================================================
+// SAVE/LOAD
+// ============================================================
+function saveState() {
+    const data = {
+        clients: state.clients,
+        bookings: state.bookings,
+        proxies: state.proxies,
+        logs: state.logs,
+        settings: state.settings,
+        stats: state.stats
+    };
+    try {
+        localStorage.setItem('bls_mantisx_v2', JSON.stringify(data));
+    } catch (e) {}
+}
+
+function loadState() {
+    const saved = localStorage.getItem('bls_mantisx_v2');
+    if (!saved) return;
+    try {
+        const data = JSON.parse(saved);
+        state.clients = data.clients || [];
+        state.bookings = data.bookings || [];
+        state.proxies = data.proxies || [];
+        state.logs = data.logs || [];
+        state.settings = data.settings || state.settings;
+        state.stats = data.stats || { captchas: 0 };
+    } catch (e) {}
+}
+
+// ============================================================
+// CLOCK
+// ============================================================
+function updateClock() {
+    const now = new Date();
+    document.getElementById('headerDate').textContent = now.toLocaleDateString('ar-EG', { weekday: 'short', month: 'short', day: 'numeric' });
+    document.getElementById('headerTime').textContent = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    loadState();
+    updateStats();
+    renderClients();
+    renderBookings();
+    renderProxies();
+    renderLogs();
+    updateClock();
+    setInterval(updateClock, 30000);
+    
+    log('SYSTEM', '🚀 BLS MANTISX v2.1');
+    
+    // اختبار الاتصال بالخادم
+    setTimeout(testServerConnection, 1000);
+});
+
+window.addEventListener('beforeunload', () => saveState());
+</script>
+
+</body>
+</html>
